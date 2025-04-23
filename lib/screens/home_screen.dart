@@ -3,46 +3,62 @@ import 'package:animation/screens/implict_animation.dart';
 import 'package:animation/screens/physics_based_animation.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0; // Tracks the selected tab index
+
+  // List of screens for each tab
+  final List<Widget> _screens = [
+    const ImplicitAnimationsScreen(),
+    const ExplicitAnimationScreen(),
+    const PhysicsAnimationScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Flutter Animations')),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          _buildNavButton(
-            context,
-            'Implicit Animations',
-            const ImplicitAnimationsScreen(),
+      appBar: AppBar(
+        title: const Text(
+          'Flutter Animations',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ), // Professional font styling
+        ),
+        centerTitle: true, // Center the title for a cleaner look
+        backgroundColor: Colors.blueAccent, // Use a professional color
+      ),
+      body: _screens[_currentIndex], // Display the selected screen
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex, // Highlight the selected tab
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index; // Update the selected tab index
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.animation), // Icon for Implicit Animations
+            label: 'Implicit',
           ),
-          _buildNavButton(
-            context,
-            'Explicit Animations',
-            const ExplicitAnimationScreen(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.explicit), // Icon for Explicit Animations
+            label: 'Explicit',
           ),
-          _buildNavButton(
-            context,
-            'Physics-Based Animations',
-            const PhysicsAnimationScreen(),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.science), // Icon for Physics-Based Animations
+            label: 'Physics',
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildNavButton(BuildContext context, String title, Widget screen) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ElevatedButton(
-        onPressed:
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => screen),
-            ),
-        child: Text(title),
+        selectedItemColor:
+            Colors.blueAccent, // Highlight color for selected tab
+        unselectedItemColor: Colors.grey, // Color for unselected tabs
+        showUnselectedLabels: true, // Show labels for unselected tabs
       ),
     );
   }
